@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/main/app', function () {
+    return view('main');
+});
+Route::post('main/app/store','MainController@store')->name('main.app.store');
