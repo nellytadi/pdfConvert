@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/main/app', function () {
-    return view('main');
-});
+Route::get('/main/app', 'MainController@create')->name('main.app');
 Route::post('main/app/store','MainController@store')->name('main.app.store');
+//'main.app.store.answer'
+Route::get('main/app/store/answer','MainController@answer')->name('main.app.store.answer');

@@ -10,6 +10,26 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style type="text/css">
+        .card {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .list-group {
+            padding-left: 50px;
+        }
+
+        .list-group-item {
+            transition: .3s;
+        }
+
+        .list-group-item:hover, .list-group .checked {
+            background-color: #007bfe;
+            color: #ffffff;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -41,32 +61,39 @@
     <form action="{{route('main.app.store')}}" enctype="multipart/form-data" method="post">
         @csrf
         <div class="form-group">
-            <label>PDF file to upload</label>
+            <label>Upload PDF</label>
             <input type="file" class="form-control" name="pdfFile"/>
         </div>
         <div class="form-group">
 
-            <input type="submit" class="btn btn-primary" name="submit"/>
+            <input type="submit" class="btn btn-primary" value="submit" name="submit"/>
         </div>
     </form>
+    <div class="row">
+        @foreach($questions as $question)
 
-    <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
-        <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-        </div>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text"><span><b>{{$question->id}}) </b></span>{{$question->question}}</p>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    @foreach($question->answers as $answer)
+
+                                <li class="list-group-item
+                                 @if($question->correct != null && $question->correct == $answer->option) checked @endif"
+                                    onclick="return submit('{{$question->id}}','{{$answer->option}}')"><span>{{$answer->option}}
+                                        . </span>{{$answer->answer}}</li>
+
+
+                    @endforeach
+                </ul>
+
+            </div>
+        @endforeach
     </div>
+
+
 </div>
 </body>
 
@@ -79,4 +106,17 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function submit(id, option) {
+//        console.log(id + option);
+
+        $.ajax({
+            url: "app/store/answer?id=" + id + "&option=" + option + "", success: function (result) {
+//            $("#div1").html(result);
+                console.log('done');
+            }
+        });
+    }
+</script>
 </html>
